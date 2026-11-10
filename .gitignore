@@ -1,0 +1,16 @@
+# Run logs can contain tenant names and UPNs
+logs/
+
+# Never commit credentials or exports with secrets
+*.pfx
+*.cer
+*.key
+*.pem
+.env
+secrets*
+*credentials*
+
+# OS and editor noise
+.DS_Store
+.vscode/
+Thumbs.db

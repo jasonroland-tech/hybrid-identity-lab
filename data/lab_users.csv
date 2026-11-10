@@ -1,0 +1,41 @@
+EmployeeId,FirstName,LastName,SamAccountName,Department,Title,OU,ManagerTitle
+E1001,Ava,Adams,aadams,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1002,Ben,Brooks,bbrooks,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1003,Carla,Chen,cchen,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1004,Darius,Diaz,ddiaz,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1005,Elena,Ellis,eellis,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1006,Femi,Foster,ffoster,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1007,Grace,Garcia,ggarcia,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1008,Hector,Hughes,hhughes,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1009,Imani,Ibrahim,iibrahim,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1010,Jonah,Jensen,jjensen,Clinical,Registered Nurse,Clinical,Nurse Manager
+E1011,Keisha,Kim,kkim,Clinical,Physician,Clinical,Nurse Manager
+E1012,Liam,Lopez,llopez,Clinical,Physician,Clinical,Nurse Manager
+E1013,Maya,Moore,mmoore,Clinical,Physician,Clinical,Nurse Manager
+E1014,Nikhil,Nguyen,nnguyen,Clinical,Physician,Clinical,Nurse Manager
+E1015,Olivia,Owens,oowens,Clinical,Physician,Clinical,Nurse Manager
+E1016,Pedro,Patel,ppatel,Clinical,Nurse Manager,Clinical,
+E1017,Quinn,Quinn,qquinn,Registration,Registration Clerk,Registration,Registration Supervisor
+E1018,Rosa,Reyes,rreyes,Registration,Registration Clerk,Registration,Registration Supervisor
+E1019,Samir,Shah,sshah,Registration,Registration Clerk,Registration,Registration Supervisor
+E1020,Tanya,Turner,tturner,Registration,Registration Clerk,Registration,Registration Supervisor
+E1021,Uriel,Usman,uusman,Registration,Registration Clerk,Registration,Registration Supervisor
+E1022,Vanessa,Vega,vvega,Registration,Registration Clerk,Registration,Registration Supervisor
+E1023,Wes,Walsh,wwalsh,Registration,Registration Supervisor,Registration,
+E1024,Ximena,Xu,xxu,Billing,Billing Specialist,Billing,Billing Manager
+E1025,Yusuf,Young,yyoung,Billing,Billing Specialist,Billing,Billing Manager
+E1026,Zoe,Zimmer,zzimmer,Billing,Billing Specialist,Billing,Billing Manager
+E1027,Andre,Allen,aallen,Billing,Billing Specialist,Billing,Billing Manager
+E1028,Bianca,Baker,bbaker,Billing,Billing Specialist,Billing,Billing Manager
+E1029,Cole,Cruz,ccruz,Billing,Billing Specialist,Billing,Billing Manager
+E1030,Dana,Dunn,ddunn,Billing,Billing Manager,Billing,
+E1031,Eli,Evans,eevans,IT,Service Desk Analyst,IT,IT Manager
+E1032,Fatima,Fisher,ffisher,IT,Service Desk Analyst,IT,IT Manager
+E1033,Gabe,Gray,ggray,IT,Service Desk Analyst,IT,IT Manager
+E1034,Hana,Hall,hhall,IT,Service Desk Analyst,IT,IT Manager
+E1035,Isaac,Irwin,iirwin,IT,IT Manager,IT,
+E1036,Jada,James,jjames,Contractors,Contract Consultant,Contractors,IT Manager
+E1037,Kofi,Khan,kkhan,Contractors,Contract Consultant,Contractors,IT Manager
+E1038,Lena,Lewis,llewis,Contractors,Contract Consultant,Contractors,IT Manager
+E1039,Marco,Mills,mmills,Contractors,Contract Consultant,Contractors,IT Manager
+E1040,Nia,Novak,nnovak,Contractors,Contract Consultant,Contractors,IT Manager
