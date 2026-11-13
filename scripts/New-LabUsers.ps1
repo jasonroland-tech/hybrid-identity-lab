@@ -123,7 +123,7 @@ foreach ($u in $users | Where-Object ManagerTitle) {
 
 # 6. JSON log, one file per run
 $logDir  = Join-Path $PSScriptRoot '..\logs'
-New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+New-Item -ItemType Directory -Path $logDir -Force -WhatIf:$false | Out-Null
 $logFile = Join-Path $logDir ("new-labusers-{0:yyyyMMdd-HHmmss}{1}.json" -f (Get-Date), $(if ($WhatIfPreference) { '-whatif' } else { '' }))
-$log | ConvertTo-Json -Depth 3 | Set-Content -Path $logFile -Encoding UTF8
+$log | ConvertTo-Json -Depth 3 | Set-Content -Path $logFile -Encoding UTF8 -WhatIf:$false
 Write-Host "`nLog written to $logFile" -ForegroundColor Green
