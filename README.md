@@ -1,71 +1,58 @@
-# Hybrid Identity Lab: Active Directory to Microsoft Entra ID
+# Hybrid Identity Lab: Active Directory to Entra ID with Cloud Sync
 
-> **Loom walkthrough:** _add link here_
+> **Loom walkthrough (5 min):** _link coming soon_
 
-A mock hospital ("Lakeview Health") built to practice the identity work IAM Analyst and IAM Administrator roles ask for: an on premises Active Directory forest synced to Microsoft Entra ID, with Conditional Access, MFA and SAML single sign on layered on top.
-
-All names and data in this repo are fake.
+Lab 2 of 5. I connected the on premises `lab.local` forest from [Lab 1](https://github.com/jasonroland-tech/active-directory-lab) to a Microsoft Entra ID tenant with **Entra Cloud Sync**, so Active Directory stays the source of truth and the cloud follows.
 
 ## What this proves
 
-| Skill | Where it shows up |
+| Skill | Evidence |
 | --- | --- |
-| Active Directory administration | OU design, security groups, bulk user creation with PowerShell |
-| Hybrid identity | Entra Cloud Sync from AD to Entra ID |
-| Authentication and access policy | Conditional Access: MFA for all users, block legacy auth, break glass exclusions |
-| Group based access | Dynamic groups by department |
-| Federation | SAML SSO to an enterprise app |
-| Automation habits | `-WhatIf` dry runs, JSON run logs, no secrets in source |
+| Hybrid identity | Cloud Sync agent on DC01, AD users provisioned to Entra ID |
+| Least privilege service accounts | Agent runs as a gMSA (`provAgentgMSA$`), not a domain admin |
+| Scoping | Only `OU=Hospital` syncs; admin and built in accounts stay on premises |
+| Authentication | Password hash sync so users sign in to the cloud with their AD password |
+| Source of authority | Synced users are read only in Entra; changes are made in AD |
 
 ## Architecture
 
-![Architecture](diagrams/architecture.png)
-
 ```
-Azure VM: DC01 (Windows Server, AD DS + DNS, lab.local)
-        │  Entra Cloud Sync agent
-        ▼
-Microsoft Entra ID tenant
-   ├── Dynamic groups by department
-   ├── Conditional Access (MFA, block legacy auth)
-   ├── Break glass accounts (excluded from CA)
-   └── Enterprise app with SAML SSO
+DC01 (lab.local)                      Microsoft Entra ID
+ ├── OU=Hospital  (40 users) ──┐
+ └── Entra provisioning agent  │  Cloud Sync, every ~2 min
+     running as LAB\provAgentgMSA$ ──────────────▶  40 users, On-premises sync = Yes
+                                       ├── password hash sync
+                                       └── scoping filter: OU=Hospital only
 ```
 
-## Repo layout
+## How I built it
 
-| Path | What it is |
-| --- | --- |
-| `scripts/Install-LabDomainController.ps1` | Promotes the VM to the first DC of `lab.local` |
-| `scripts/New-LabUsers.ps1` | Creates OUs, department groups, 40 users and managers from CSV; supports `-WhatIf` |
-| `data/lab_users.csv` | Fake HR feed: 40 employees across 5 departments |
-| `docs/build-log.md` | What I built each day, what broke, how I fixed it |
-| `docs/conditional-access/` | Exported Conditional Access policies (JSON) |
-| `diagrams/` | Architecture diagram |
-
-## Directory design
-
-```
-lab.local
-└── OU=Hospital
-    ├── OU=Clinical       (nurses, physicians, nurse manager)
-    ├── OU=Registration
-    ├── OU=Billing
-    ├── OU=IT
-    ├── OU=Contractors
-    └── OU=Groups         (GG-Clinical, GG-Registration, GG-Billing, GG-IT, GG-Contractors)
-```
-
-## How to run
-
-```powershell
-# On the VM, elevated PowerShell
-.\scripts\Install-LabDomainController.ps1 -DomainName lab.local -NetbiosName LAB
-# after the reboot
-.\scripts\New-LabUsers.ps1 -UpnSuffix <yourtenant>.onmicrosoft.com -WhatIf
-.\scripts\New-LabUsers.ps1 -UpnSuffix <yourtenant>.onmicrosoft.com
-```
+1. **Created a KDS root key** so AD could create the gMSA (backdated 10 hours, a lab only shortcut).
+2. **Installed the provisioning agent** on DC01, signed in with a cloud admin, let it create the gMSA, and connected `lab.local`.
+   ![Agent configured](screenshots/01-cloud-sync-agent-configured.png)
+3. **Created the configuration** with password hash sync and a scoping filter for `OU=Hospital,DC=lab,DC=local`.
+   ![Scope](screenshots/02-cloud-sync-scope-hospital-ou.png)
+4. **Enabled it** and confirmed it was healthy.
+   ![Healthy](screenshots/03-cloud-sync-healthy.png)
+5. **Verified in Entra:** 40 synced users with department, title and company, alongside 5 cloud only accounts.
+   ![Synced users](screenshots/04-entra-synced-users.png)
 
 ## Lessons learned
 
-_Fill in from docs/build-log.md: the two or three problems worth telling an interviewer about._
+- **gMSA needs a KDS root key.** A brand new domain has none, and a new key normally waits 10 hours before it can be used.
+- **Scope on purpose.** Syncing only the Hospital OU keeps the domain admin and built in accounts out of the cloud.
+- **AD is the source of authority.** Most fields on a synced user are greyed out in Entra; edit them in AD and let sync carry them up.
+
+The JML test that uses this sync is in [Lab 3](https://github.com/jasonroland-tech/identity-lifecycle-jml-lab).
+
+## Lakeview Health identity lab series
+
+A mock hospital built step by step. Each lab is its own repo with a short Loom walkthrough.
+
+| # | Lab | Focus |
+| --- | --- | --- |
+| 1 | [active-directory-lab](https://github.com/jasonroland-tech/active-directory-lab) | Active Directory domain in Azure |
+| 2 | **hybrid-identity-lab** (this repo) | AD to Entra ID with Cloud Sync |
+| 3 | [identity-lifecycle-jml-lab](https://github.com/jasonroland-tech/identity-lifecycle-jml-lab) | Joiner, mover, leaver automation |
+| 4 | [entra-conditional-access-lab](https://github.com/jasonroland-tech/entra-conditional-access-lab) | Conditional Access and break glass |
+| 5 | [entra-saml-sso-lab](https://github.com/jasonroland-tech/entra-saml-sso-lab) | SAML single sign on |
